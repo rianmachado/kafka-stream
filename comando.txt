@@ -1,0 +1,2 @@
+./mvnw clean package  -f kafka-streams-producer/pom.xml -Dnative -Dquarkus.native.container-build=true
+./mvnw clean package  -f kafka-streams-aggregator/pom.xml -Dnative -Dquarkus.native.container-build=true
