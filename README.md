@@ -1,22 +1,20 @@
 Kafka Streams in Native Image
 ========================
 
-This project illustrates how you can build [Apache Kafka Streams](https://kafka.apache.org/documentation/streams) applications using Quarkus.
+Este projeto mostra como você pode criar aplicativos Apache Kafka Streams usando o Quarkus.
 
-## Anatomy
+## Estrutura 
 
-This quickstart is made up of the following parts:
+Esta aplicação de exemplo é composta pelas seguintes partes::
 
 * Apache Kafka and ZooKeeper
-* _producer_, a Quarkus application that publishes some test data on two Kafka topics: `weather-stations` and `temperature-values`
-* _aggregator_, a Quarkus application processing the two topics, using the Kafka Streams API
+* _producer_,  aplicativo Quarkus que utiliza SmallRye Reactive Messaging para enviar dados a dois tópicos Kafka: `movies` e `playtimemovies`. Em `Movies` encontraremos informações de Filmes e `playtimemovies` amarzenará ocorrências de quanto tempo o filme foi reproduzido.
 
-The _aggregator_ application is the interesting piece; it
+* _aggregator_, aplicativo Quarkus que processa os tópicos, `movies` e `playtimemovies` usando a API Kafka Streams.
 
-* runs a KStreams pipeline, that joins the two topics (on the weather station id),
-groups the values by weather station and emits the minimum/maximum temperature value per station to the `temperatures-aggregated` topic
-* exposes an HTTP endpoint for getting the current minimum/maximum values
-for a given station using Kafka Streams interactive queries.
+O _aggregator_ é parte interessante neste aplicativo de exemplo. Isso porque executa um pipeline KStreams, que une os dois tópicos agrupando valores pelo `ID` do Filme. A pipeline filtra os Filmes que foram reproduzidos por mais de 100 minutos e também armazena a quantidade de vezes que um determinado Filme foi reproduzido por mais de 100 minutos. 
+* Um endpoint HTTP será utilizado psra consultas interativas do Kafka Streams.
+
 
 ## Building
 
