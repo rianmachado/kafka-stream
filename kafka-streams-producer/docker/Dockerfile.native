@@ -7,7 +7,7 @@
 #
 # Then, build the image with:
 #
-# docker build -f Dockerfile.native -t rianmachado/producer-movie .
+# docker build -f Dockerfile.native -t rianmachado/native-producer-movie .
 #
 # Then run the container using:
 #
