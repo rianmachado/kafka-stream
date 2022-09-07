@@ -13,6 +13,15 @@ Esta aplicação de exemplo é composta pelas seguintes partes::
 * _aggregator_, aplicativo Quarkus que processa os tópicos, `movies` e `playtimemovies` usando a API Kafka Streams. O _aggregator_ é parte interessante neste aplicativo de exemplo. Isso porque executa um pipeline KStreams, que une os dois tópicos agrupando valores pelo `ID` do Filme. A pipeline filtra os Filmes que foram reproduzidos por mais de 100 minutos e também armazena a quantidade de vezes que um determinado Filme foi reproduzido por mais de 100 minutos. Um endpoint HTTP será utilizado psra consultas interativas do Kafka Streams.
 
 
+## Pré requisitos
+
+* JDK 11+ instalado com JAVA_HOME configurado adequadamente
+* Apache Maven 3.8.1+
+* Docker e Docker Compose ou Podman e Docker Compose
+* Opcionalmente, a CLI do Quarkus, se você quiser usá-la
+* Opcionalmente, Mandrel ou GraalVM instalado e configurado adequadamente se você deseja compilar um executável nativo (ou Docker, se usar uma compilação de contêiner nativo)
+
+
 ## Building
 
 To build the _producer_ and _aggregator_ applications, run
