@@ -1,4 +1,4 @@
-Quarkus Kafka Streams Quickstart
+Kafka Streams in Native Image
 ========================
 
 This project illustrates how you can build [Apache Kafka Streams](https://kafka.apache.org/documentation/streams) applications using Quarkus.
