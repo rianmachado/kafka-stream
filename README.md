@@ -22,13 +22,21 @@ Esta aplicação de exemplo é composta pelas seguintes partes::
 * Opcionalmente, Mandrel ou GraalVM instalado e configurado adequadamente se você deseja compilar um executável nativo (ou Docker, se usar uma compilação de contêiner nativo)
 
 
-## Building
+## Building Native Image
 
-To build the _producer_ and _aggregator_ applications, run
+Para construir os aplicativos execute o comando abaixo na raiz principal do projeto(kafka-stream).
+```bash
+mvn package -f kafka-streams-producer/pom.xml -Pnative -Dquarkus.native.container-build=true
+mvn package -f kafka-streams-aggregator/pom.xml -Pnative -Dquarkus.native.container-build=true
+```
+
+## Criando imagens Docker para seus aplicativos
 
 ```bash
-mvn clean install
+docker build -f Dockerfile.native -t rianmachado/native-aggregator-movie .
+docker build -f Dockerfile.native -t rianmachado/native-producer-movie .
 ```
+
 
 ## Running
 
