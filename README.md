@@ -43,7 +43,7 @@ docker build -f Dockerfile.native -t rianmachado/native-producer-movie .
 docker-compose -f docker-compose-kafka.yaml up
 ```
 
-## Criando tópicos para a pipeline KStreams
+## Criando tópicos para pipeline de streaming
 
 ```bash
 docker exec -it kafka-streams_kafka_1 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-changelog
