@@ -37,130 +37,50 @@ docker build -f Dockerfile.native -t rianmachado/native-aggregator-movie .
 docker build -f Dockerfile.native -t rianmachado/native-producer-movie .
 ```
 
+## Running Broker Kafka 
+
+```bash
+docker-compose -f docker-compose-kafka.yaml up
+```
+
+## Criando tópicos para o pipeline KStreams
+
+```bash
+docker exec -it kafka-streams_kafka_1 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-changelog
+
+docker exec -it kafka-streams_kafka_1 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-repartition
+```
 
 ## Running
 
-A Docker Compose file is provided for running all the components.
-Start all containers by running:
+O arquivo docker-compose.yaml é fornecido para executar os aplicativos _aggregator_ e _producer_ .
+Inicie todos os contêineres executando:
 
 ```bash
-docker-compose up -d --build
+docker-compose up
 ```
 
-Now run an instance of the _debezium/tooling_ image which comes with several useful tools such as _kafkacat_ and _httpie_:
+## Scalando
+
+Os pipelines do Kafka Streams podem ser dimensionados, ou seja, a carga pode ser distribuída entre várias instâncias de aplicativos que executam o mesmo pipeline.
+
+Dimensione o serviço _aggregator_ para três nós:
 
 ```bash
-docker run --tty --rm -i --network ks debezium/tooling:1.1
+docker-compose up --scale aggregator=3
 ```
 
-In the tooling container, run _kafkacat_ to examine the results of the streaming pipeline:
+Isso ativará mais duas instâncias desse serviço.
+O armazenamento de estado que materializa o estado atual do pipeline de streaming, é agora distribuído entre os três nós através do balanceador de carga do Docker Compose que distribuirá solicitações para o serviço _aggregator_ de forma round-robin. 
 
-```bash
-kafkacat -b kafka:9092 -C -o beginning -q -t temperatures-aggregated
-```
-
-You also can obtain the current aggregated state for a given weather station using _httpie_,
-which will invoke an Kafka Streams interactive query for that value:
-
-```bash
-http aggregator:8080/weather-stations/data/1
-```
-
-## Scaling
-
-Kafka Streams pipelines can be scaled out, i.e. the load can be distributed amongst multiple application instances running the same pipeline.
-To try this out, scale the _aggregator_ service to three nodes:
-
-```bash
-docker-compose up -d --scale aggregator=3
-```
-
-This will spin up two more instances of this service.
-The state store that materializes the current state of the streaming pipeline
-(which we queried before using the interactive query),
-is now distributed amongst the three nodes.
-I.e. when invoking the REST API on any of the three instances, it might either be
-that the aggregation for the requested weather station id is stored locally on the node receiving the query,
-or it could be stored on one of the other two nodes.
-
-As the load balancer of Docker Compose will distribute requests to the _aggregator_ service in a round-robin fashion,
-we'll invoke the actual nodes directly.
-The application exposes information about all the host names via REST:
-
-```bash
-http aggregator:8080/weather-stations/meta-data
-```
-
-Retrieve the data from one of the three hosts shown in the response
+Para executar as consultas interativas do Kafka Streams execute:
 (your actual host names will differ):
 
 ```bash
-http cf143d359acc:8080/weather-stations/data/1
+http://localhost:8080/movie/data/1
 ```
 
-If that node holds the data for key "1", you'll get a response like this:
 
-```
-HTTP/1.1 200 OK
-Connection: keep-alive
-Content-Length: 74
-Content-Type: application/json
-Date: Tue, 11 Jun 2019 19:16:31 GMT
-
-{
-    "avg": 15.7,
-    "count": 11,
-    "max": 31.0,
-    "min": 3.3,
-    "stationId": 1,
-    "stationName": "Hamburg"
-}
-```
-
-Otherwise, the service will send a redirect:
-
-```
-HTTP/1.1 303 See Other
-Connection: keep-alive
-Content-Length: 0
-Date: Tue, 11 Jun 2019 19:17:51 GMT
-Location: http://72064bb97be9:8080/weather-stations/data/2
-```
-
-You can have _httpie_ automatically follow the redirect by passing the `--follow` option:
-
-```bash
-http --follow aggregator:8080/weather-stations/data/2
-```
-
-## TLS 
-
-In case HTTP is disabled via:
-
-```properties
-quarkus.http.insecure-requests=disabled
-```
-
-The endpoint URL becomes:
-
-```bash
-curl -L --insecure https://aggregator:8443/weather-stations/data/2
-```
-
-## Running in native
-
-To run the _producer_ and _aggregator_ applications as native binaries via GraalVM,
-first run the Maven builds using the `native` profile:
-
-```bash
-mvn clean install -Pnative -Dnative-image.container-runtime=docker
-```
-
-Then create an environment variable named `QUARKUS_MODE` and with value set to "native":
-
-```bash
-export QUARKUS_MODE=native
-```
 
 Now start Docker Compose as described above.
 
