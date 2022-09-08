@@ -46,6 +46,12 @@ docker-compose -f docker-compose-kafka.yaml up
 ## Criando tópicos para pipeline de streaming
 
 ```bash
+
+docker exec -it kafka-stream_kafka_1 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic playtimemovies
+
+docker exec -it kafka-stream_kafka_1 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic movies
+
+
 docker exec -it kafka-stream_kafka_1 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-changelog
 
 docker exec -it kafka-stream_kafka_1 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-repartition
