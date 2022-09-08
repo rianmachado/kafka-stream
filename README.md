@@ -51,7 +51,6 @@ docker exec -it kafka-stream_kafka_1 bin/kafka-topics.sh --create --bootstrap-se
 
 docker exec -it kafka-stream_kafka_1 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic movies
 
-
 docker exec -it kafka-stream_kafka_1 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-changelog
 
 docker exec -it kafka-stream_kafka_1 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-repartition
