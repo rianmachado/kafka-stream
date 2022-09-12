@@ -36,18 +36,6 @@ mvn package -f kafka-streams-aggregator/pom.xml -Pnative -Dquarkus.native.contai
 docker-compose -f docker-compose-kafka.yaml up
 ```
 
-
-## Criando imagens Docker e iniciando os aplicativos de exemplo
-
-No meu Docker hub(rianmachado) está disponível duas imagens Docker empacotando os executáveis producer e aggregator, mas você poderá criar suas proprias imagens. Os comandos abaixo utilizam o `docker compose ` para criar a imagem a partir do Dockerfile e também iniciar o aplicativo. Execute cada comando em consoles diferentes, assim poderá acompanhar melhor os Logs do <b>Producer e Aggregator</b>.  
-
-```bash
-docker-compose -f docker-compose-producer.yaml up
-docker-compose -f docker-compose-aggregator.yaml up
-```
-
-
-
 ## Criando tópicos para pipeline de streaming
 
 ```bash
@@ -58,14 +46,16 @@ docker exec -it kafka-stream_kafka_1 kafka-topics.sh --create --bootstrap-server
 docker exec -it kafka-stream_kafka_1 kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-repartition
 ```
 
-## Running
 
-O arquivo docker-compose.yaml é fornecido para executar os aplicativos _aggregator_ e _producer_ .
-Inicie todos os contêineres executando:
+## Criando imagens Docker e iniciando os aplicativos de exemplo
+
+No meu Docker hub(rianmachado) está disponível duas imagens Docker empacotando os executáveis producer e aggregator, mas você poderá criar suas proprias imagens. Os comandos abaixo utilizam o `docker compose ` para criar a imagem a partir do Dockerfile e também iniciar o aplicativo. Execute cada comando em consoles diferentes, assim poderá acompanhar melhor os Logs do <b>Producer e Aggregator</b>.  
 
 ```bash
-docker-compose up
+docker-compose -f docker-compose-producer.yaml up
+docker-compose -f docker-compose-aggregator.yaml up
 ```
+
 
 ## Scalando
 
@@ -101,10 +91,8 @@ Open this file an editor and change the value of the `KAFKA_ADVERTISED_LISTENERS
 Then run:
 
 ```bash
-docker-compose -f docker-compose-local.yaml up
-
+docker-compose -f docker-compose-kafka.yaml up
 mvn quarkus:dev -f producer/pom.xml
-
 mvn quarkus:dev -Dquarkus.http.port=8081 -f aggregator/pom.xml
 ```
 
