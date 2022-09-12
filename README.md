@@ -30,30 +30,32 @@ mvn package -f kafka-streams-producer/pom.xml -Pnative -Dquarkus.native.containe
 mvn package -f kafka-streams-aggregator/pom.xml -Pnative -Dquarkus.native.container-build=true
 ```
 
-## Criando imagens Docker para seus aplicativos
-
-```bash
-docker build -f Dockerfile.native -t rianmachado/native-aggregator-movie .
-docker build -f Dockerfile.native -t rianmachado/native-producer-movie .
-```
-
 ## Running Broker Kafka 
 
 ```bash
 docker-compose -f docker-compose-kafka.yaml up
 ```
 
+
+## Criando imagens Docker e iniciando os aplicativos de exemplo
+
+No meu Docker hub(rianmachado) está disponível duas imagens Docker empacotando os executáveis producer e aggregator, mas você poderá criar suas proprias imagens. Os comandos abaixo utilizam o `docker compose ` para criar a imagem a partir do Dockerfile e também iniciar o aplicativo. Execute cada comando em consoles diferentes, assim poderá acompanhar melhor os Logs do <b>Producer e Aggregator</b>.  
+
+```bash
+docker-compose -f docker-compose-producer.yaml up
+docker-compose -f docker-compose-aggregator.yaml up
+```
+
+
+
 ## Criando tópicos para pipeline de streaming
 
 ```bash
 
-docker exec -it kafka-stream_kafka_1 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic playtimemovies
-
-docker exec -it kafka-stream_kafka_1 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic movies
-
-docker exec -it kafka-stream_kafka_1 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-changelog
-
-docker exec -it kafka-stream_kafka_1 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-repartition
+docker exec -it kafka-stream_kafka_1 kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic playtimemovies
+docker exec -it kafka-stream_kafka_1 kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic movies
+docker exec -it kafka-stream_kafka_1 kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-changelog
+docker exec -it kafka-stream_kafka_1 kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-repartition
 ```
 
 ## Running
