@@ -1,0 +1,20 @@
+groups:
+  - name: app-producer
+    rules:
+        - alert: JvmMemoryFillingUp
+          expr: (sum by (instance)(jvm_memory_used_bytes{area="heap"}) / sum by (instance)(jvm_memory_max_bytes{area="heap"})) * 100 > 5
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: JVM memory filling up (instance {{ $labels.instance }})
+            description: "JVM memory is filling up (> 5%)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+        - alert: PulsarHighWriteLatency
+          expr: sum(pulsar_storage_write_latency_overflow > 0) by (topic)
+          for: 1h
+          labels:
+            severity: critical
+          annotations:
+            summary: Pulsar high write latency (instance {{ $labels.instance }})
+            description: "Messages cannot be written in a timely fashion\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"

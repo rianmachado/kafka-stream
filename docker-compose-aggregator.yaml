@@ -1,0 +1,11 @@
+version: '3.5'
+
+services:
+
+  kafka-streams-aggregator:
+    image: rianmachado/native-aggregator-movie:latest
+    build:
+      context: kafka-streams-aggregator
+      dockerfile: docker/Dockerfile.native
+    environment:
+      QUARKUS_KAFKA_STREAMS_BOOTSTRAP_SERVERS: kafka:9093

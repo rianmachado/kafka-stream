@@ -1,11 +1,11 @@
-./mvnw clean package  -f kafka-streams-producer/pom.xml -Dnative -Dquarkus.native.container-build=true
-./mvnw clean package  -f kafka-streams-aggregator/pom.xml -Dnative -Dquarkus.native.container-build=true
-
+## Start  Grafana
 docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource" grafana/grafana:8.5.0
 
-rm -rf /var/folders/k9/5rzjklv92tqb937swt96tj_c0000gp/T//kafka-streams
-
+## Start  prometheus
+docker run -d --name prometheus -p 9090:9090 -v kafka-streams-producer/docker/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus --config.file=/etc/prometheus/prometheus.yml
+docker run -p 9090:9090  -v /path/to/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
 
 docker run -p 8080:8080 rianmachado/native-producer-movie:latest JAVA_OPTIONS="-Dkafka.bootstrap.servers=localhost:9092"
-
 docker-compose  up --remove-orphans
+
+rm -rf /var/folders/k9/5rzjklv92tqb937swt96tj_c0000gp/T//kafka-streams
