@@ -39,7 +39,7 @@ public class MovieProducer {
 
 	@Outgoing("play-time-movies")
 	public Multi<Record<String, PlayedMovie>> generate() {
-		return Multi.createFrom().ticks().every(Duration.ofMillis(10000))
+		return Multi.createFrom().ticks().every(Duration.ofMillis(100))
 					.onOverflow().drop().map(tick -> {
 						Movie movie = movies.get(random.nextInt(movies.size()));
 						int time = random.nextInt(300);

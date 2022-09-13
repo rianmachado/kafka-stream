@@ -32,6 +32,15 @@ mvn package -f kafka-streams-aggregator/pom.xml -Pnative -Dquarkus.native.contai
 
 ## Running Broker Kafka 
 
+Antes de executar o comando abaixo você precisa informar os diretórios para montar os <b>volumes</b> 
+Exemplo: 
+
+    volumes:
+      - 'kafka_data:/Users/colaborador/kafka-docker'
+      
+         volumes:
+      - 'zookeeper_data:/Users/colaborador/zookeeper-docker' 
+ 
 ```bash
 docker-compose -f docker-compose-kafka.yaml up
 ```
@@ -49,12 +58,113 @@ docker exec -it kafka-stream_kafka_1 kafka-topics.sh --create --bootstrap-server
 
 ## Criando imagens Docker e iniciando os aplicativos de exemplo
 
-No meu Docker hub(rianmachado) está disponível duas imagens Docker empacotando os executáveis producer e aggregator, mas você poderá criar suas proprias imagens. Os comandos abaixo utilizam o `docker compose ` para criar a imagem a partir do Dockerfile e também iniciar o aplicativo. Execute cada comando em consoles diferentes, assim poderá acompanhar melhor os Logs do <b>Producer e Aggregator</b>.  
+No Docker hub(rianmachado) estão disponíveis duas imagens Docker quem empacotam os executáveis producer e aggregator, mas você poderá criar suas proprias imagens. Os comandos abaixo utilizam o `docker compose ` para criar a imagem a partir do Dockerfile e também iniciar o aplicativo. 
+Para facilitar a demostração do nosso exemplo, execute cada comando em consoles diferentes, assim poderá acompanhar melhor os Logs do <b>Producer e Aggregator</b>.  
 
 ```bash
 docker-compose -f docker-compose-producer.yaml up
 docker-compose -f docker-compose-aggregator.yaml up
 ```
+## Monitorando
+
+SmallRye Health permite que os aplicativos forneçam informações sobre seu estado, dessa forma possibilitando o monitoramento por ferramentas externas. Normalmente é útil em ambientes de nuvem onde os processos automatizados devem ser capazes de determinar se o aplicativo deve ser descartado ou reiniciado.
+
+Se as aplicações producer e aggregator foram iniciadas com sucesso teremos respectivamente  
+
+`http://localhost:8081/q/health`
+ 
+```JSON
+{
+    "status": "UP",
+    "checks": [
+        {
+            "name": "SmallRye Reactive Messaging - liveness check",
+            "status": "UP",
+            "data": {
+                "movies": "[OK]",
+                "play-time-movies": "[OK]"
+            }
+        },
+        {
+            "name": "Kafka connection health check",
+            "status": "UP",
+            "data": {
+                "nodes": "localhost:9092"
+            }
+        },
+        {
+            "name": "SmallRye Reactive Messaging - readiness check",
+            "status": "UP",
+            "data": {
+                "movies": "[OK]",
+                "play-time-movies": "[OK]"
+            }
+        },
+        {
+            "name": "SmallRye Reactive Messaging - startup check",
+            "status": "UP",
+            "data": {
+                "movies": "[OK]",
+                "play-time-movies": "[OK]"
+            }
+        }
+    ]
+}
+```
+`http://localhost:8080/q/health`
+ 
+```JSON
+
+{
+    "status": "UP",
+    "checks": [
+        {
+            "name": "Kafka Streams state health check",
+            "status": "UP",
+            "data": {
+                "state": "RUNNING"
+            }
+        },
+        {
+            "name": "Kafka Streams topics health check",
+            "status": "UP",
+            "data": {
+                "available_topics": "playtimemovies,movies"
+            }
+        },
+        {
+            "name": "Kafka connection health check",
+            "status": "UP",
+            "data": {
+                "nodes": "localhost:55002"
+            }
+        }
+    ]
+}
+```
+##Métricas##
+
+Ainda no contexto saúde das aplicações `producer` e `aggregator` podemos extrair métricas incríveis.
+Estamos falando do Micrometer(`quarkus-micrometer-registry-prometheu`). Biblioteca que oferece um mecanismo de registro para vários tipos de métricas o que pode ser uma boa idéia para fornecer uma camada de abstração. Podendo ser adaptada para diferentes sistemas de monitoramento de back-end. 
+
+Para coletarmos as métricas vamos utilizar o <b>Prometheu</b>
+
+Antes de executar o comando abaixo edite os arquivos `kafka-streams-producer/monitoring/prometheus/prometheus.yml` e `kafka-streams-producer/monitoring/prometheus/prometheus.yml` para informar seu IP. 
+
+      - targets:
+          - 'xxx.xxx.xxx.xxx'
+ 
+```bash
+docker-compose -f kafka-streams-producer/monitoring/docker-compose.yml up
+
+Acesse: http://localhost:9091/targets
+```
+```bash
+docker-compose -f kafka-streams-aggregator/monitoring/docker-compose.yml up
+
+Acesse: http://localhost:9091/targets
+```
+
 
 
 ## Scalando
@@ -71,30 +181,24 @@ Isso ativará mais duas instâncias desse serviço.
 O armazenamento de estado que materializa o estado atual do pipeline de streaming, é agora distribuído entre os três nós através do balanceador de carga do Docker Compose que distribuirá solicitações para o serviço _aggregator_ de forma round-robin. 
 
 Para executar as consultas interativas do Kafka Streams execute:
-(your actual host names will differ):
 
 ```bash
 http://localhost:8080/movie/data/1
 ```
 
 
+## Rodando em ambiente de desenvolvimento
 
-Now start Docker Compose as described above.
-
-## Running locally
-
-For development purposes it can be handy to run the _producer_ and _aggregator_ applications
-directly on your local machine instead of via Docker.
-For that purpose, a separate Docker Compose file is provided which just starts Apache Kafka and ZooKeeper, _docker-compose-local.yaml_
-configured to be accessible from your host system.
-Open this file an editor and change the value of the `KAFKA_ADVERTISED_LISTENERS` variable so it contains your host machine's name or ip address.
-Then run:
+Para fins de desenvolvimento, pode ser útil executar os aplicativos _producer_ e _aggregator_
+diretamente em sua máquina local em não via Docker. Para esse fim, é fornecido o arquivo _docker-compose-kafka-local.yaml_ que iniciará o Apache Kafka e ZooKeeper.
 
 ```bash
-docker-compose -f docker-compose-kafka.yaml up
-mvn quarkus:dev -f producer/pom.xml
-mvn quarkus:dev -Dquarkus.http.port=8081 -f aggregator/pom.xml
+docker-compose -f _docker-compose-kafka-local.yaml up
+```
+Agora podemos executar as aplicações 
+
+```bash
+./mvnw quarkus:dev -f kafka-streams-producer/pom.xml
+./mvnw quarkus:dev -f kafka-streams-aggregator/pom.xml
 ```
 
-Any changes done to the _aggregator_ application will be picked up instantly,
-and a reload of the stream processing application will be triggered upon the next Kafka message to be processed.
