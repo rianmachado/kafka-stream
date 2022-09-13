@@ -142,7 +142,7 @@ Se as aplicações producer e aggregator foram iniciadas com sucesso teremos res
     ]
 }
 ```
-##Métricas##
+## Métricas
 
 Ainda no contexto saúde das aplicações `producer` e `aggregator` podemos extrair métricas incríveis.
 Estamos falando do Micrometer(`quarkus-micrometer-registry-prometheu`). Biblioteca que oferece um mecanismo de registro para vários tipos de métricas o que pode ser uma boa idéia para fornecer uma camada de abstração. Podendo ser adaptada para diferentes sistemas de monitoramento de back-end. 
