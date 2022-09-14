@@ -4,8 +4,10 @@ services:
 
   kafka-streams-aggregator:
     image: rianmachado/native-aggregator-movie:latest
+    ports:
+      - '8080:8080'
     build:
       context: kafka-streams-aggregator
-      dockerfile: docker/Dockerfile.native
+      dockerfile: docker/Dockerfile.jvm
     environment:
       QUARKUS_KAFKA_STREAMS_BOOTSTRAP_SERVERS: kafka:9093

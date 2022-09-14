@@ -4,6 +4,8 @@ services:
 
   kafka-streams-producer:
     image: rianmachado/native-producer-movie:latest
+    ports:
+      - '8081:8081'
     build:
       context: kafka-streams-producer
       dockerfile: docker/Dockerfile.native
