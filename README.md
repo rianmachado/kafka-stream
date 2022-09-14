@@ -150,7 +150,8 @@ Estamos falando do Micrometer(`quarkus-micrometer-registry-prometheu`). Bibliote
 
 Para coletarmos as métricas vamos utilizar o <b>Prometheu</b>
 
-Antes de executar o comando abaixo edite os arquivos `kafka-streams-producer/monitoring/prometheus/prometheus.yml` e `kafka-streams-producer/monitoring/prometheus/prometheus.yml` para informar seu IP. 
+Antes de executar o comando abaixo informe seu <b>IP</b> alterando os arquivos: 
+`kafka-streams-producer/monitoring/prometheus/prometheus.yml` e `kafka-streams-producer/monitoring/prometheus/prometheus.yml`
 
       - targets:
           - 'xxx.xxx.xxx.xxx'
