@@ -50,10 +50,10 @@ docker-compose -f docker-compose-kafka.yaml up
 
 ```bash
 
-docker exec -it kafka-stream_kafka_1 kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic playtimemovies
-docker exec -it kafka-stream_kafka_1 kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic movies
-docker exec -it kafka-stream_kafka_1 kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-changelog
-docker exec -it kafka-stream_kafka_1 kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-repartition
+docker exec -it kafka-stream-kafka-1 kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic playtimemovies
+docker exec -it kafka-stream-kafka-1 kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic movies
+docker exec -it kafka-stream-kafka-1 kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-changelog
+docker exec -it kafka-stream-kafka-1 kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kstream-aggregator-countmoviestore-repartition
 ```
 
 
