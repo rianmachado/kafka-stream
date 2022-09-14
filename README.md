@@ -24,7 +24,8 @@ Esta aplicação de exemplo é composta pelas seguintes partes::
 
 ## Building Native Image
 
-Para construir os aplicativos execute o comando abaixo na raiz principal do projeto(kafka-stream).
+O comando abaixo cria o executável nativo para os aplicativos <b>kafka-streams-producer e kafka-streams-aggregator</b>. Execute o comando abaixo na raiz principal do projeto(kafka-stream).
+
 ```bash
 mvn package -f kafka-streams-producer/pom.xml -Pnative -Dquarkus.native.container-build=true
 mvn package -f kafka-streams-aggregator/pom.xml -Pnative -Dquarkus.native.container-build=true

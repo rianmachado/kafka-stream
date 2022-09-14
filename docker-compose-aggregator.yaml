@@ -8,6 +8,6 @@ services:
       - '8080:8080'
     build:
       context: kafka-streams-aggregator
-      dockerfile: docker/Dockerfile.jvm
+      dockerfile: docker/Dockerfile.native
     environment:
       QUARKUS_KAFKA_STREAMS_BOOTSTRAP_SERVERS: kafka:9093
