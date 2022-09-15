@@ -176,7 +176,7 @@ Os pipelines do Kafka Streams podem ser dimensionados, ou seja, a carga pode ser
 Dimensione o serviço _aggregator_ para três nós:
 
 ```bash
-docker-compose -f docker-compose-aggregator.yaml up --scale kafka-streams-aggregator=3
+docker-compose -f docker-compose-aggregator-no-port.yaml up -d --scale kafka-streams-aggregator-replicas=3
 ```
 
 Isso ativará mais duas instâncias desse serviço.

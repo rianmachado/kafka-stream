@@ -1,7 +1,5 @@
 version: '3.5'
-
 services:
-
   kafka-streams-producer:
     image: rianmachado/native-producer-movie:latest
     ports:

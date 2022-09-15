@@ -1,9 +1,7 @@
 version: '3.5'
 services:
-  kafka-streams-aggregator:
+  kafka-streams-aggregator-replicas:
     image: rianmachado/native-aggregator-movie:latest
-    ports:
-      - '8080:8080'
     build:
       context: kafka-streams-aggregator
       dockerfile: docker/Dockerfile.native
