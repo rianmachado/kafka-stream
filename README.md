@@ -39,7 +39,7 @@ Exemplo:
     volumes:
       - 'kafka_data:/Users/colaborador/kafka-docker'
       
-         volumes:
+    volumes:
       - 'zookeeper_data:/Users/colaborador/zookeeper-docker' 
  
 ```bash
@@ -176,7 +176,7 @@ Os pipelines do Kafka Streams podem ser dimensionados, ou seja, a carga pode ser
 Dimensione o serviço _aggregator_ para três nós:
 
 ```bash
-docker-compose up --scale aggregator=3
+docker-compose -f docker-compose-aggregator.yaml up --scale kafka-streams-aggregator=3
 ```
 
 Isso ativará mais duas instâncias desse serviço.
