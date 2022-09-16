@@ -63,7 +63,10 @@ No Docker hub(rianmachado) estão disponíveis duas imagens Docker quem empacota
 Para facilitar a demostração do nosso exemplo, execute cada comando em consoles diferentes, assim poderá acompanhar melhor os Logs do <b>Producer e Aggregator</b>.  
 
 ```bash
+docker pull rianmachado/native-producer-movie:latest
 docker-compose -f docker-compose-producer.yaml up
+
+docker pull rianmachado/native-aggregator-movie:latest
 docker-compose -f docker-compose-aggregator.yaml up
 ```
 ## Monitorando
