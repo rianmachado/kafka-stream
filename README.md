@@ -167,7 +167,7 @@ Acesse: http://localhost:9091/targets
 ```bash
 docker-compose -f kafka-streams-aggregator/monitoring/docker-compose.yml up
 
-Acesse: http://localhost:9091/targets
+Acesse: http://localhost:9090/targets
 ```
 
 
