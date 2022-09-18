@@ -118,7 +118,6 @@ Se as aplicações producer e aggregator foram iniciadas com sucesso teremos res
 `http://localhost:8080/q/health`
  
 ```JSON
-
 {
     "status": "UP",
     "checks": [
@@ -134,13 +133,6 @@ Se as aplicações producer e aggregator foram iniciadas com sucesso teremos res
             "status": "UP",
             "data": {
                 "available_topics": "playtimemovies,movies"
-            }
-        },
-        {
-            "name": "Kafka connection health check",
-            "status": "UP",
-            "data": {
-                "nodes": "localhost:55002"
             }
         }
     ]
