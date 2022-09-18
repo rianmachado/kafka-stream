@@ -135,13 +135,6 @@ Se as aplicações producer e aggregator foram iniciadas com sucesso teremos res
             "data": {
                 "available_topics": "playtimemovies,movies"
             }
-        },
-        {
-            "name": "Kafka connection health check",
-            "status": "UP",
-            "data": {
-                "nodes": "localhost:55002"
-            }
         }
     ]
 }
