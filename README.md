@@ -5,12 +5,12 @@ Este projeto mostra como você pode criar aplicativos Apache Kafka Streams usand
 
 ## Estrutura 
 
-Esta aplicação de exemplo é composta pelas seguintes partes::
+Esta aplicação de exemplo é composta pelas seguintes partes:
 
 * Apache Kafka and ZooKeeper
 * _producer_,  aplicativo Quarkus que utiliza <b>SmallRye Reactive Messaging</b> para enviar dados a dois tópicos Kafka: `movies` e `playtimemovies`. Em `Movies` encontraremos informações de Filmes e `playtimemovies` amarzenará ocorrências de quanto tempo o filme foi reproduzido.
 
-* _aggregator_, aplicativo Quarkus que processa os tópicos, `movies` e `playtimemovies` usando a API Kafka Streams. O _aggregator_ é parte interessante neste aplicativo de exemplo. Isso porque executa um pipeline KStreams, que une os dois tópicos agrupando valores pelo `ID` do Filme. A pipeline filtra os Filmes que foram reproduzidos por mais de 100 minutos e também armazena a quantidade de vezes que um determinado Filme foi reproduzido por mais de 100 minutos. Um endpoint HTTP será utilizado psra consultas interativas do Kafka Streams.
+* _aggregator_, aplicativo Quarkus que processa os tópicos, `movies` e `playtimemovies` usando a API Kafka Streams. O _aggregator_ é parte interessante neste aplicativo de exemplo. Isso porque executa um pipeline KStreams, que une os dois tópicos agrupando valores pelo `ID` do Filme. A pipeline filtra os Filmes que foram reproduzidos por mais de 100 minutos e também armazena a quantidade de vezes que um determinado Filme foi reproduzido. Um endpoint HTTP será utilizado para consultas interativas do Kafka Streams.
 
 
 ## Pré requisitos
@@ -20,6 +20,7 @@ Esta aplicação de exemplo é composta pelas seguintes partes::
 * Docker e Docker Compose ou Podman e Docker Compose
 * Opcionalmente, a CLI do Quarkus, se você quiser usá-la
 * Opcionalmente, Mandrel ou GraalVM instalado e configurado adequadamente se você deseja compilar um executável nativo (ou Docker, se usar uma compilação de contêiner nativo)
+* Opcionalmente, se quiser montar os Dashboard de dados.
 
 
 ## Building Native Image
@@ -183,6 +184,19 @@ Para executar as consultas interativas do Kafka Streams execute:
 http://localhost:8080/movie/data/1
 ```
 
+## Consultas interativas
+Através das consultas interativas do Kafka Streams, podemos obter dados ingeridos no Kafka em tempo real. Este aplicativo de exemplo implementa a camada de consulta através da calsse `InteractiveQueries.java` que é exposta a partir de uma camada <b>REST</b>, implementada pelo controlador `MovieCountResource.java`. 
+Para fins ilustrativos plugamos o Grafana na camada REST, `/movie/data/` que está disponível no aplicativo <b>kafka-streams-aggregator</b>  
+
+Executando a Grafana:
+
+```bash
+docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource" grafana/grafana:8.5.0
+
+```
+* Acesse: http://localhost:3000/
+* Adicione o Data Source <b>Infinity</b> para que seja possível conectar na camada REST `/movie/data/`
+* Crie um novo DashBoard. Selecione um template e informe a seguinte URL: `http://<SEU_IP>/movie/data/`
 
 ## Rodando em ambiente de desenvolvimento
 
