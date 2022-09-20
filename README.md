@@ -155,13 +155,14 @@ Antes de executar o comando abaixo informe seu <b>IP</b> alterando os arquivos:
 ```bash
 docker-compose -f kafka-streams-producer/monitoring/docker-compose.yml up
 ```
-* Acesse: http://localhost:9091/targets
+Acesse: http://localhost:9091/targets
+
 
 ```bash
 docker-compose -f kafka-streams-aggregator/monitoring/docker-compose.yml up
 
 ```
-* Acesse: http://localhost:9090/targets
+Acesse: http://localhost:9090/targets
 
 
 ## Scalando
