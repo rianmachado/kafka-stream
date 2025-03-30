@@ -1,14 +1,18 @@
 package rian.demo.pojo;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import lombok.Getter;
+import lombok.Setter;
 
 @RegisterForReflection
+@Getter
+@Setter
 public class Movie {
 
-	public int id;
-	public String name;
-	public String director;
-	public String genre;
+	private int id;
+	private String name;
+	private String director;
+	private String genre;
 
 	public Movie(int id, String name, String director, String genre) {
 		this.id = id;

@@ -33,7 +33,7 @@ public class InteractiveQueries {
 		MoviePlayCount moviePlayCount = getMoviesPlayCount().get(id);
 		if (moviePlayCount != null) {
 			// Wrap the result into MoviePlayCountData
-			return Optional.of(new MoviePlayCountData(moviePlayCount.name, moviePlayCount.count));
+			return Optional.of(new MoviePlayCountData(moviePlayCount.getName(), moviePlayCount.getCount()));
 		} else {
 			return Optional.empty();
 		}

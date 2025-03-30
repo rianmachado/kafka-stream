@@ -34,7 +34,7 @@ public class MovieProducer {
 	@Outgoing("movies")
 	public Multi<Record<Integer, Movie>> movies() {
 		return Multi.createFrom()
-					.items(movies.stream().map(m -> Record.of(m.id, m)));
+					.items(movies.stream().map(m -> Record.of(m.getId(), m)));
 	}
 
 	@Outgoing("play-time-movies")
@@ -43,10 +43,10 @@ public class MovieProducer {
 					.onOverflow().drop().map(tick -> {
 						Movie movie = movies.get(random.nextInt(movies.size()));
 						int time = random.nextInt(300);
-						logger.info("FILME " + movie.name + " PERIODO DE EXECUCAO:  " + time + " MINUTES");
+						logger.info("FILME " + movie.getName() + " PERIODO DE EXECUCAO:  " + time + " MINUTES");
 						count += 1;
 						logger.info("TOTAL EXECUCOES................... " + count);
-						return Record.of("eu", new PlayedMovie(movie.id, time));
+						return Record.of("eu", new PlayedMovie(movie.getId(), time));
 					});
 	}
 

@@ -1,12 +1,16 @@
 package rian.demo.pojo;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import lombok.Getter;
+import lombok.Setter;
 
 @RegisterForReflection
+@Getter
+@Setter
 public class MoviePlayCount {
 	
-	public String name;
-	public int count;
+	private String name;
+	private int count;
 
 	public MoviePlayCount aggregate(String name) {
 		this.name = name;

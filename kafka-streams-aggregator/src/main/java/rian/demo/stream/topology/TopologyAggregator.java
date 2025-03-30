@@ -44,11 +44,11 @@ public class TopologyAggregator {
 		KStream<String, MoviePlayed> playEvents = builder.stream(Global.PLAY_MOVIES_TOPIC,Consumed.with(Serdes.String(), moviePlayedSerder));
 
 		playEvents
-		.filter((region, event) -> event.duration >= 100) 
-		.map((key, value) -> KeyValue.pair(value.id, value))
+		.filter((region, event) -> event.getDuration() >= 100) 
+		.map((key, value) -> KeyValue.pair(value.getId(), value))
 		.join(moviesTable, (movieId, moviePlayedId) -> movieId, (moviePlayed, movie) -> movie)
 		.groupByKey(Grouped.with(Serdes.Integer(), movieSerder))
-		.aggregate(MoviePlayCount::new,(movieId, movie, moviePlayCounter) -> moviePlayCounter.aggregate(movie.name),
+		.aggregate(MoviePlayCount::new,(movieId, movie, moviePlayCounter) -> moviePlayCounter.aggregate(movie.getName()),
 				   Materialized.<Integer, MoviePlayCount> as(storeSupplier)
 	               	.withKeySerde(Serdes.Integer())
 	               	.withValueSerde(moviePlayCountSerder))
